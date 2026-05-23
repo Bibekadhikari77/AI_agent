@@ -21,7 +21,7 @@ ARIA is an advanced AI desktop agent designed to automate tasks, generate files,
 
 ## ✨ Core Features
 
-- **🎙️ Voice & Chat Interface**: Talk to ARIA using your microphone. Audio is transcribed via OpenAI's Whisper model and processed by GPT-4o.
+- **🎙️ Voice & Chat Interface**: Talk to ARIA using your microphone. Voice uses browser Speech Recognition when available (fast, no server-side transcription required) and falls back to uploading audio to the backend when needed.
 - **🌐 Desktop App Automation**: Instruct ARIA to open applications or websites instantly (e.g., "Open YouTube", "Take me to WhatsApp").
 - **📄 Advanced File Generation**: 
   - **Excel (.xlsx)**: Generates stylized spreadsheets with dynamic data.
@@ -44,7 +44,7 @@ ai_agent/
 ├── backend/            # Express REST API & Socket server
 │   ├── controllers/    # API logic (agent, files, memory, auth)
 │   ├── models/         # MongoDB schemas (User, Conversation, Memory)
-│   ├── services/       # Core business logic (OpenAI, File Generation)
+│   ├── services/       # Core business logic (OpenAI/Gemini, File Generation)
 │   └── server.js       # Entry point
 ├── frontend/           # React + Vite web application
 │   ├── src/
@@ -67,7 +67,9 @@ Follow these steps to run the application professionally in your local developme
 ### 1. Prerequisites
 - **Node.js** (v18.0.0 or higher)
 - **MongoDB** (running locally on port `27017` or via MongoDB Atlas)
-- **OpenAI API Key**
+- **An AI API key**:
+  - **Gemini API Key** (recommended if you want to avoid OpenAI quota issues), or
+  - **OpenAI API Key**
 
 ### 2. Installation
 Clone the repository and install all dependencies for the root, backend, frontend, and electron.
@@ -90,8 +92,18 @@ cp .env.example .env
 Open `.env` and fill in your details:
 ```env
 MONGODB_URI=mongodb://localhost:27017/ai_agent_db
-OPENAI_API_KEY=your_openai_api_key_here
 JWT_SECRET=your_secure_jwt_secret
+
+# Provider selection: openai | gemini
+AI_PROVIDER=gemini
+
+# Gemini (Google AI Studio)
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
+
+# (Optional) OpenAI (used if AI_PROVIDER=openai; also used by voice upload transcription if you keep that path)
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o
 ```
 
 ### 4. Running the Development Server
@@ -101,6 +113,8 @@ You can launch the full stack (Frontend & Backend) simultaneously using the root
 # Starts both Express (port 5000) and Vite (port 5173) concurrently
 npm run dev
 ```
+
+Note: If you start only the frontend, you will see Vite proxy errors (`ECONNREFUSED 127.0.0.1:5000`) until the backend is running.
 
 ### 5. Running as a Desktop App (Electron)
 To experience ARIA as a native desktop application, open a new terminal window and run:
@@ -130,7 +144,9 @@ npm run electron:dev
   - `pdfkit` (PDFs)
   - `docx` (Word documents)
   - `multer` (Voice buffer handling)
-- **AI Integration**: Official `openai` Node SDK.
+- **AI Integration**:
+  - `@google/genai` (Gemini)
+  - `openai` (OpenAI)
 
 ### Desktop
 - **Shell**: Electron.js
@@ -166,6 +182,10 @@ To build the project for production:
    npm run build
    ```
    This utilizes `electron-builder` to generate `.AppImage` (Linux), `.exe` (Windows), or `.dmg` (Mac) installers in the `electron/release` folder.
+
+   Notes:
+   - The Electron build bundles the frontend `dist` output and loads it in production mode.
+   - In development, Electron points at `http://localhost:5173`, so the frontend dev server must be running.
 
 3. **Deploying the Web Version**:
    - Host the `backend` on Render, Heroku, or an AWS EC2 instance.
