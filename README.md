@@ -1,3 +1,5 @@
+<img width="1832" height="970" alt="image" src="https://github.com/user-attachments/assets/794c2219-d25e-4fea-8010-9da5ea3a2512" />
+
 <div align="center">
   <img src="./frontend/public/aria-icon.svg" width="100" alt="ARIA Logo" />
   
