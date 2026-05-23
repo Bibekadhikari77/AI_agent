@@ -1,0 +1,23 @@
+{
+  "name": "ai-desktop-agent",
+  "version": "1.0.0",
+  "description": "MERN AI Desktop Agent with Voice, Automation, and Local Desktop Control",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "electron": "cd electron && npm start",
+    "electron:dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"wait-on http://localhost:5173 && cd electron && npm start\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../electron && npm install",
+    "build": "cd frontend && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0"
+  }
+}
