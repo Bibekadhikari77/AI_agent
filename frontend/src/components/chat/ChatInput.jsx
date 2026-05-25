@@ -13,7 +13,6 @@ const QUICK_COMMANDS = [
   { label: 'Excel', icon: FileSpreadsheet, cmd: 'Generate an Excel sheet with monthly sales data for 2024', color: '#217346' },
   { label: 'PDF', icon: FileText, cmd: 'Generate a PDF report about our project progress', color: '#E44D26' },
 ]
-
 export default function ChatInput() {
   const [text, setText] = useState('')
   const [rows, setRows] = useState(1)

@@ -20,6 +20,7 @@ export default function ConversationList() {
     navigate(`/chat/${id}`)
   }
 
+  
   if (conversations.length === 0) {
     return (
       <div className="conv-empty">

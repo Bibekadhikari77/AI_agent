@@ -28,6 +28,7 @@ const ACTION_LABELS = {
   schedule: '⏰ Scheduled'
 }
 
+
 export default function MessageBubble({ message, isNew }) {
   const isUser = message.role === 'user'
   const TypeIcon = TYPE_ICONS[message.type]
